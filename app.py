@@ -1,10 +1,10 @@
-# do not replace imports 
+# do not replace imports
 # this import order fix kivy Config bag
 
+import context
 from kivy.config import Config
-from config import config
 
-Config.read(config.APP_CONFIG)
+Config.read(str(context.APP_CONFIG))
 Config.write()
 
 from kivymd.app import MDApp
@@ -23,8 +23,8 @@ class Application(MDApp):
             MainWidget: main application widget
 
         """
-        
-        self.title = config.TITLE
+
+        self.title = context.TITLE
         self.main_widget = MainWidget()
 
         return self.main_widget
