@@ -26,9 +26,9 @@ class PagesParser:
 
         [TEXT] text
 
-        [IMAGE] url | file_path
+        [IMAGE] Optional(size, default=150), url | file_path
 
-        [TEST]
+        [TEST] Optional(repeatable, default=0), title
             [QUESTION] text
             [INPUT] var1, var2, ... | NULL
             [ANSWER] text
@@ -41,7 +41,7 @@ class PagesParser:
     BLOCK_PATTERN = r'((?=\[\w+\])(.|\n)+?(?=\[\w+\]))|(\[END\])'
     TYPE_PATTERN = r'\[\w+\]'
 
-    TYPES = {
+    BLOCK_BUILDERS = {
         '[TITLE]': TitleBlock,
         '[TEXT]': TextBlock,
         '[IMAGE]': ImageBlock,
@@ -137,7 +137,7 @@ class PagesParser:
             raw_type = re.match(cls.TYPE_PATTERN, raw_block).group()
             raw_entity = raw_block.replace(raw_type, '').strip()
 
-            block_type = cls.TYPES[raw_type]
+            block_type = cls.BLOCK_BUILDERS[raw_type]
 
             block, test_block, question = cls._process_block(
                 block_type, raw_block, raw_type, raw_entity, test_block, question
@@ -179,7 +179,7 @@ class PagesParser:
         """
 
         if test_block is not None:
-            if question.question and question.input and question.answer:
+            if question.is_full:
                 test_block.questions.append(question)
                 question = TestQuestion()
 
@@ -188,31 +188,31 @@ class PagesParser:
                     raise ParseError(
                         f'Double [QUESTION] block found at {raw_block}')
 
-                question.question = block_type(raw_entity)
+                question.question = block_type(raw_entity).question
                 block = None
             elif block_type == InputBlock:
                 if question.input is not None:
                     raise ParseError(
                         f'Double [INPUT] block found at {raw_block}')
 
-                question.input = block_type(raw_entity)
+                question.input = block_type(raw_entity).input
                 block = None
             elif block_type == AnswerBlock:
                 if question.answer is not None:
                     raise ParseError(
                         f'Double [ANSWER] block found at {raw_block}')
 
-                question.answer = block_type(raw_entity)
+                question.answer = block_type(raw_entity).answer
                 block = None
             else:
-                if question.question or question.input or question.answer:
+                if not question.is_empty:
                     raise ParseError(
                         f'Unexpected {raw_type} block in [TEST] block at {raw_block}')
 
                 block = block_type(raw_entity)
         else:
             if block_type == TestBlock:
-                test_block = TestBlock([])
+                test_block = TestBlock(raw_entity, [])
                 block = None
             elif block_type in (QuestionBlock, InputBlock, AnswerBlock):
                 raise ParseError(
