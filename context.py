@@ -10,17 +10,15 @@ EWD = Path(sys._MEIPASS) if hasattr(sys, '_MEIPASS') else Path.cwd()
 CWD = Path.cwd()
 APP_CONFIG_PATH = EWD / 'app_config.ini'
 
-# read config.ini file
+# Read application configs from config.ini file
 __config = ConfigParser()
 __config.read(CWD / 'config.ini', encoding='utf-8')
-__defaults = __config['DEFAULT']
+__configs = __config['DEFAULT']
 
-TITLE = __defaults['TITLE']
-ICON = __defaults['ICON']
-COLOR = __defaults['COLOR']
+# Application configs
+ICON = EWD / 'resources' / 'icon.png'
+TITLE = __configs['TITLE']
+COLOR = __configs['COLOR']
 COLOR_RGB = colors[COLOR]['500']
-PAGES_PATH = Path(__defaults['PAGES_PATH'])
-PAGES_ORDER = __defaults['PAGES_ORDER'].split(', ')
-
-PAGES = PagesParser.get_pages(PAGES_PATH)
-PAGES = {group: PAGES[group] for group in PAGES_ORDER}
+PAGES_PATH = Path(__configs['PAGES_PATH'])
+GROUPS_ORDER = __configs['GROUPS_ORDER'].split(', ')

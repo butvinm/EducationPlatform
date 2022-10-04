@@ -9,28 +9,27 @@ from widgets.menu_item import MenuItem
 
 class MenuBar(MDStackLayout):
     """Widget located on the top of window. 
-    Consisted MenuItem's for pages opening. MenuItem's are related on context.PAGES
+    Consists MenuItem's implementing PageViewer pages opening
     """
 
     def __init__(self, page_viewer: PageViewer, *args, **kwargs):
-        """Set appearance and generate menu items
+        """Set appearance and build menu items
 
         Args:
             page_viewer (PageViewer): Widget for pages displaying
         """
 
         super().__init__(*args, **kwargs)
+        # widget properties
         self.adaptive_height = True
         self.padding = [dp(5)]
         self.spacing = [dp(10), 0]
         self.line_color = context.COLOR_RGB
 
-        menu_items = self._build_menu_items(page_viewer)
-        for menu_item in menu_items:
-            self.add_widget(menu_item)
+        self._update_widgets(page_viewer)
 
-    def _build_menu_items(self, page_viewer: PageViewer) -> list[MenuItem]:
-        """Build list of MenuItems from context.PAGES
+    def _update_widgets(self, page_viewer: PageViewer) -> list[MenuItem]:
+        """Build list of MenuItems by PageViewer pages
 
         Args:
             page_viewer (PageViewer): Widget for pages displaying
@@ -39,8 +38,7 @@ class MenuBar(MDStackLayout):
             list[MenuItem]: list of MenuItems
         """
 
-        menu_items = [
-            MenuItem(group, list(pages.keys()), page_viewer)
-            for group, pages in context.PAGES.items()
-        ]
-        return menu_items
+        for group, pages in page_viewer.pages.items():
+            menu_item = MenuItem(group, list(pages.keys()), page_viewer.open_page)        
+            self.add_widget(menu_item)
+            

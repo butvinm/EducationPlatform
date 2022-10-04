@@ -21,7 +21,7 @@ a = Analysis(
 		   (path / 'widgets/*', 'widgets'),
 		   (path / 'structures/*', 'structures'),
 		   (path / 'parse_utils/*', 'parse_utils'),
-		   (path / 'icon.png', '.')
+		   (path / 'resources/*', 'resources')
 	   ],
     hookspath=[kivymd_hooks_path],
     excludes=[],
