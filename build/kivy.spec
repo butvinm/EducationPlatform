@@ -2,25 +2,26 @@
 
 import sys
 import os
+from pathlib import Path
 
 from kivy_deps import sdl2, glew
 
 from kivymd import hooks_path as kivymd_hooks_path
 
-path = os.path.abspath(".")
+path = Path(os.path.abspath('..'))
 
 a = Analysis(
-    ['main.py'],
-    pathex=[path],
+    [path /'main.py'],
+    pathex=[path.absolute()],
    	datas=[
-		   ('app.py', '.'), 
-		   ('main.py', '.'),
-		   ('app_config.ini', '.'),
-		   ('context.py', '.'),
-		   ('widgets/*', 'widgets'),
-		   ('structures/*', 'structures'),
-		   ('parse_utils/*', 'parse_utils'),
-		   ('icon.png', '.'),
+		   (path / 'app.py', '.'), 
+		   (path / 'main.py', '.'),
+		   (path / 'app_config.ini', '.'),
+		   (path / 'context.py', '.'),
+		   (path / 'widgets/*', 'widgets'),
+		   (path / 'structures/*', 'structures'),
+		   (path / 'parse_utils/*', 'parse_utils'),
+		   (path / 'icon.png', '.')
 	   ],
     hookspath=[kivymd_hooks_path],
     excludes=[],
@@ -42,6 +43,6 @@ exe = EXE(
     strip=False,
     upx=True,
     name="EducationPlatform",
-	icon='icon.ico',
+	icon=str(path / 'icon.ico'),
     console=False,                                                                            
 )
