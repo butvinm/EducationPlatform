@@ -20,5 +20,6 @@ ICON = EWD / 'resources' / 'icon.png'
 TITLE = __configs['TITLE']
 COLOR = __configs['COLOR']
 COLOR_RGB = colors[COLOR]['500']
+PREVIEW_IMAGE_PATH = Path(__configs['PREVIEW_IMAGE_PATH'])
 PAGES_PATH = Path(__configs['PAGES_PATH'])
 GROUPS_ORDER = __configs['GROUPS_ORDER'].split(', ')

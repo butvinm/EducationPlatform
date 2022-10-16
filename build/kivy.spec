@@ -11,7 +11,7 @@ from kivymd import hooks_path as kivymd_hooks_path
 path = Path(os.path.abspath('..'))
 
 a = Analysis(
-    [path /'main.py'],
+    [path / 'main.py'],
     pathex=[path.absolute()],
    	datas=[
 		   (path / 'app.py', '.'), 
@@ -43,6 +43,6 @@ exe = EXE(
     strip=False,
     upx=True,
     name="EducationPlatform",
-	icon=str(path / 'icon.ico'),
+	icon=str(path / 'resources' / 'icon.ico'),
     console=False,                                                                            
 )
